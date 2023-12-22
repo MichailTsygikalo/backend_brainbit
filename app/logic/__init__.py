@@ -1,1 +1,1 @@
-from app.logic.response import ResponceTest
+from app.logic.response import ResponceTest, Registration, Authentication, Download
