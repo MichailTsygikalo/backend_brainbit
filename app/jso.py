@@ -5,7 +5,7 @@ import time
 count = 0
 data = []   
 
-while count < 1000:
+while count < 10:
     current_time = str(int(time.time()))  # Получаем текущее время в формате UNIX timestamp
     count += 1
 

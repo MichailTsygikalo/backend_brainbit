@@ -4,7 +4,7 @@ from app import db
 import json
 import random
 import time
-from app.model import User
+from app.model import User, Survey, Data
 print("hello")
 task_post_args = reqparse.RequestParser()
 task_post_args.add_argument("text_question",type=str,help="Task is text_question", required= True )
@@ -65,5 +65,22 @@ class Authentication(Resource):
 class Download(Resource):
     def post(self):
         files = request.get_json()
-        print(files)
+        # print(files)
+        survey = files.get('survey')
+        user = files.get('email')
+        statistic = files.get('statistic')
+        if user and survey and statistic:
+            item_survey = Survey(state=survey)
+            db.session.add(item_survey)
+            db.session.commit()
+            print(user)
+            item_id = User.query.filter_by(email = user).first().id
+            print(item_id)
+            for i in statistic:
+                item_static = Data(id_user =item_id,  id_survey = int(len(Survey.query.all())), positive =i['positive'], 
+                negative = i['negative'], date = i['date'] )
+                db.session.add(item_static)
+                db.session.commit()
+            print(survey)
+            print(statistic)
         return {'message': 'Received the data successfully'}, 200
