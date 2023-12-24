@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       series: [
         {
-          name: "Color",
+          name: "Concentration",
           data: chartData.map((item) => item.y),
           turboThreshold: 1000,
           color: "orange",
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       series: [
         {
-          name: "Color",
+          name: "Relax",
           data: chartDataRelax.map((item) => item.y),
           turboThreshold: 1000,
           color: "green",
