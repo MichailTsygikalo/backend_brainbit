@@ -138,6 +138,23 @@ h1 {
   margin-top: 30px;
   font-size: 40px;
 }
+
+.session_info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+}
+.info {
+  padding: 10px;
+  border: 3px solid #0a7a74;
+}
+.session_name {
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+strong {
+  font-weight: 700;
+}
 /* ADAPTIV */
 @media (max-width: 1000px) {
   /* … */

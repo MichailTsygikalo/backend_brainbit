@@ -21,9 +21,11 @@ def profile():
     avg_positive = db.session.query(func.avg(Data.positive)).filter(Data.id_user ==current_user.get_id()).scalar()
     avg_negative = db.session.query(func.avg(Data.negative)).filter(Data.id_user ==current_user.get_id()).scalar()
     item_session = Survey.query.filter_by(id_user=current_user.get_id()).all()
-    if avg_positive and  avg_negative and item_session:
+    avg_survey = db.session.query(func.avg(Survey.state)).filter(Survey.id_user == current_user.get_id()).scalar()
+    if avg_positive and  avg_negative and item_session and avg_survey:
         avg_positive = int(avg_positive)
         avg_negative= int(avg_negative)
+        avg_survey= int(avg_survey)
         for item in item_session:
             data_user_positive = db.session.query(func.avg(Data.positive)).filter(Data.id_survey==item.id).scalar()
             data_user_negative = db.session.query(func.avg(Data.negative)).filter(Data.id_survey==item.id).scalar()
@@ -31,39 +33,45 @@ def profile():
                 user_info = {
                     'Conc': int(data_user_positive),
                     'Relax': int(data_user_negative),
+                    'Static': item.state+1,
                 }
                 array_data.append(user_info)
-    return render_template("profile.html", positive = avg_positive, negative = avg_negative, data_avg = array_data)
+    return render_template("profile.html", positive = avg_positive, negative = avg_negative, data_avg = array_data, avg_survey=avg_survey)
 @app.route('/', methods = [ 'GET'])
 def index():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
+    print(current_user.is_authenticated)
+    print(current_user.get_id())
+    user_id=0
     if current_user.is_authenticated:
-        json_data = []
-    # for _ in range(1000):
-    #     data_point = {
-    #         "date": str((1500000000+_)),  # Random timestamp between 2017 and 2027
-    #         "positive": str(random.randint(0, 100)),
-    #         "negative": str(random.randint(0, 100)),
+        user_id = current_user.get_id()
+    # if current_user.is_authenticated:
+    #     json_data = []
+    # # for _ in range(1000):
+    # #     data_point = {
+    # #         "date": str((1500000000+_)),  # Random timestamp between 2017 and 2027
+    # #         "positive": str(random.randint(0, 100)),
+    # #         "negative": str(random.randint(0, 100)),
+    # #     }
+    # #     json_data.append(data_point)
+
+    # items = Data.query.filter_by(id_user = 1, id_survey =7).all()
+    # for i in items:
+    #     data_point ={
+    #         "date": i.date,
+    #         "positive": i.positive,
+    #         "negative": i.negative,
     #     }
     #     json_data.append(data_point)
-
-    items = Data.query.filter_by(id_user = 1, id_survey =7).all()
-    for i in items:
-        data_point ={
-            "date": i.date,
-            "positive": i.positive,
-            "negative": i.negative,
-        }
-        json_data.append(data_point)
-    processed_data = []
-    for item in json_data:
-        date = int(item['date'])
-        positive = int(item['positive'])
-        negative = int(item['negative'])
-        processed_data.append({'x': date, 'y': positive})
-    print(processed_data)
-    return render_template('index.html', data=json.dumps(processed_data))
+    # processed_data = []
+    # for item in json_data:
+    #     date = int(item['date'])
+    #     positive = int(item['positive'])
+    #     negative = int(item['negative'])
+    #     processed_data.append({'x': date, 'y': positive})
+    # print(processed_data)
+    return render_template('index.html',user=user_id )
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

@@ -3,11 +3,18 @@
 <div class="profile_container">
   <p>Среднее значение концертрации: {{positive}}</p>
   <p>Среднее значение релаксации: {{negative}}</p>
-  <p>Выборка по сессиям средние значения:</p>
-  {% for item in data_avg %}
-  <p>
-    {{ loop.index }}. Концертрация: {{ item.Conc }} Релаксация: {{ item.Relax }}
-  </p>
-  {% endfor %}
+  <p>Средня оценка проведенного времени: {{avg_survey}}</p>
+  <p class="session_name">Выборка по сессиям средние значения:</p>
+  <div class="session_info">
+    {% for item in data_avg %}
+    <div class="info">
+      <p><strong>№ {{ loop.index }}</strong></p>
+      <p>Концертрация: {{ item.Conc }}</p>
+      <p>Релаксация: {{ item.Relax }}</p>
+      <p>Оценка: {{ item.Static }}</p>
+    </div>
+    {% endfor %}
+    <div class="session_info"></div>
+    {% endblock %}
+  </div>
 </div>
-{% endblock %}

@@ -1,3 +1,9 @@
+var userFromDataAttribute = document
+  .getElementById("container")
+  .getAttribute("data-user");
+
+console.log(userFromDataAttribute);
+
 document.addEventListener("DOMContentLoaded", function () {
   let chart;
   let chartData = [];
@@ -6,10 +12,17 @@ document.addEventListener("DOMContentLoaded", function () {
     chartData = JSON.parse(data);
 
     chartData.forEach(function (item) {
-      item.x = new Date(item.x * 1000).toLocaleString();
+      var date = new Date(item.x * 1000);
+      var timeString = date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZone: "UTC",
+      });
+      item.x = timeString;
     });
 
-    chart = Highcharts.chart("container", {
+    chart = Highcharts.chart("containerconc", {
       chart: {
         type: "line",
       },
@@ -50,7 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function fetchData() {
     try {
-      let response = await fetch("http://localhost:5000/upl");
+      let response = await fetch(
+        `http://localhost:5000/upl?user_id=${userFromDataAttribute}`
+      );
 
       if (response.ok) {
         let json = await response.json();
@@ -61,7 +76,14 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
           chartData = JSON.parse(JSON.stringify(json));
           chartData.forEach(function (item) {
-            item.x = new Date(item.x * 1000).toLocaleString();
+            var date = new Date(item.x * 1000);
+            var timeString = date.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              timeZone: "UTC", // Измененный формат времени для концентрации
+            });
+            item.x = timeString;
           });
 
           chart.series[0].setData(
@@ -85,14 +107,20 @@ document.addEventListener("DOMContentLoaded", function () {
   let chartDataRelax = [];
 
   function initializeChartRelax(data) {
-    chartData = JSON.parse(data);
+    chartDataRelax = JSON.parse(data);
 
-    chartData.forEach(function (item) {
-      item.x = new Date(item.x * 1000).toLocaleString();
+    chartDataRelax.forEach(function (item) {
+      var date = new Date(item.x * 1000);
+      var timeString = date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+      item.x = timeString;
     });
 
     chartRelax = Highcharts.chart("containerrelax", {
-      chartRelax: {
+      chart: {
         type: "line",
       },
       title: {
@@ -132,7 +160,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function fetchDataRelax() {
     try {
-      let response = await fetch("http://localhost:5000/uplrelax");
+      let response = await fetch(
+        `http://localhost:5000/uplrelax?user_id=${userFromDataAttribute}`
+      );
 
       if (response.ok) {
         let json = await response.json();
@@ -143,7 +173,13 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
           chartDataRelax = JSON.parse(JSON.stringify(json));
           chartDataRelax.forEach(function (item) {
-            item.x = new Date(item.x * 1000).toLocaleString();
+            var date = new Date(item.x * 1000);
+            var timeString = date.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            });
+            item.x = timeString;
           });
 
           chartRelax.series[0].setData(

@@ -30,8 +30,9 @@
         </div>
       </div>
     </header>
+    <div>{{user}}</div>
     <div
-      id="container"
+      id="containerconc"
       style="width: 100%; height: 400px"
       data-chartdata="{{ data }}"
     ></div>
@@ -40,6 +41,17 @@
       style="width: 100%; height: 400px"
       data-chartdata-relax="{{ dataRelax }}"
     ></div>
+    <div
+      id="container"
+      style="width: 100%; height: 400px"
+      data-chartdata="{{ data }}"
+      data-user="{{ user }}"
+    ></div>
+
     <script src="../static/script.js"></script>
+    <script>
+      var userFromFlask = "{{ user }}";
+      console.log(userFromFlask);
+    </script>
   </body>
 </html>

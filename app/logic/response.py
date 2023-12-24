@@ -93,13 +93,17 @@ class Download(Resource):
 class Upload(Resource):
     def get(self):
         print("Uploda")
+        user_id = -1
+        user_id = request.args.get('user_id')
+        print(user_id)
         json_data = []
         # items = Data.query.filter_by(id_user = 2, id_survey =  int(int(Survey.query.order_by(Survey.id.desc()).first().id))).all()
         print(current_user.is_authenticated)
         print(current_user.get_id())
-
-        if current_user.is_authenticated: 
-            items = Data.query.filter_by(id_user = current_user.get_id(), id_survey = None).all()
+        items = []
+        if user_id != -1: 
+            # items = Data.query.filter_by(id_user = current_user.get_id(), id_survey = None).all()
+            items = Data.query.filter_by(id_user = user_id, id_survey = None).all()
         if len(items) >0:
             for i in items:
                 data_point ={
@@ -109,9 +113,11 @@ class Upload(Resource):
                 }
                 json_data.append(data_point)
         else:
-            survey_id = Survey.query.filter_by(id_user=current_user.get_id()).order_by(Survey.id.desc()).first().id
+            # survey_id = Survey.query.filter_by(id_user=current_user.get_id()).order_by(Survey.id.desc()).first().id
+            survey_id = Survey.query.filter_by(id_user=user_id).order_by(Survey.id.desc()).first().id
             print(survey_id)
-            items = Data.query.filter_by(id_user = current_user.get_id(), id_survey = survey_id).all()
+            # items = Data.query.filter_by(id_user = current_user.get_id(), id_survey = survey_id).all()
+            items = Data.query.filter_by(id_user = user_id, id_survey = survey_id).all()
             for i in items:
                 data_point ={
                     "date": i.date,
@@ -133,13 +139,17 @@ class UploadRelax(Resource):
     def get(self):
         print("Uploda")
         json_data = []
+        user_id = -1
+        user_id = request.args.get('user_id')
+
         # items = Data.query.filter_by(id_user = 2, id_survey =  int(int(Survey.query.order_by(Survey.id.desc()).first().id))).all()
         print(current_user.is_authenticated)
         print(current_user.get_id())
-        if current_user.is_authenticated: 
-            print("Hello")
-            print(current_user.id)
-            items = Data.query.filter_by(id_user = current_user.get_id(), id_survey = None).all()
+        items = []
+
+        if user_id != -1: 
+            items = Data.query.filter_by(id_user = user_id, id_survey = None).all()
+            # items = Data.query.filter_by(id_user = current_user.get_id(), id_survey = None).all()
         if len(items) >0:
             for i in items:
                 data_point ={
@@ -149,9 +159,11 @@ class UploadRelax(Resource):
                 }
                 json_data.append(data_point)
         else:
-            survey_id = Survey.query.filter_by(id_user=current_user.get_id()).order_by(Survey.id.desc()).first().id
+            # survey_id = Survey.query.filter_by(id_user=current_user.get_id()).order_by(Survey.id.desc()).first().id
+            survey_id = Survey.query.filter_by(id_user=user_id).order_by(Survey.id.desc()).first().id
             print(survey_id)
-            items = Data.query.filter_by(id_user = current_user.get_id(), id_survey = survey_id).all()
+            # items = Data.query.filter_by(id_user = current_user.get_id(), id_survey = survey_id).all()
+            items = Data.query.filter_by(id_user =user_id, id_survey = survey_id).all()
             for i in items:
                 data_point ={
                     "date": i.date,
