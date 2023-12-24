@@ -1,0 +1,13 @@
+{% extends "base.html" %} {% block content %}
+<h1>Профиль</h1>
+<div class="profile_container">
+  <p>Среднее значение концертрации: {{positive}}</p>
+  <p>Среднее значение релаксации: {{negative}}</p>
+  <p>Выборка по сессиям средние значения:</p>
+  {% for item in data_avg %}
+  <p>
+    {{ loop.index }}. Концертрация: {{ item.Conc }} Релаксация: {{ item.Relax }}
+  </p>
+  {% endfor %}
+</div>
+{% endblock %}

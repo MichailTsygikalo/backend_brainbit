@@ -1,9 +1,11 @@
-from app import app, api
+from app import app, api, db
 from flask_restful import Resource, fields, marshal_with, abort,reqparse
 from flask import render_template, redirect, url_for, jsonify
+# from flask_sqlalchemy import func
 from app.logic import ResponceTest, Registration, Authentication, Download,  DownloadTest, Upload, UploadRelax
-from app.model import Data, User
+from app.model import Data, User, Survey
 from app.form import LoginForm
+from sqlalchemy import func
 import json
 import random
 from flask_login import current_user, login_user, logout_user
@@ -12,7 +14,26 @@ from flask import g
 def test():
     print(current_user.get_id())
     return render_template("index.html", user_id = current_user.get_id())
-
+@app.route('/profile', methods = [ 'GET'])
+def profile():
+    print("PROFILE")
+    array_data= []
+    avg_positive = db.session.query(func.avg(Data.positive)).filter(Data.id_user ==current_user.get_id()).scalar()
+    avg_negative = db.session.query(func.avg(Data.negative)).filter(Data.id_user ==current_user.get_id()).scalar()
+    item_session = Survey.query.filter_by(id_user=current_user.get_id()).all()
+    if avg_positive and  avg_negative and item_session:
+        avg_positive = int(avg_positive)
+        avg_negative= int(avg_negative)
+        for item in item_session:
+            data_user_positive = db.session.query(func.avg(Data.positive)).filter(Data.id_survey==item.id).scalar()
+            data_user_negative = db.session.query(func.avg(Data.negative)).filter(Data.id_survey==item.id).scalar()
+            if data_user_positive and data_user_negative:
+                user_info = {
+                    'Conc': int(data_user_positive),
+                    'Relax': int(data_user_negative),
+                }
+                array_data.append(user_info)
+    return render_template("profile.html", positive = avg_positive, negative = avg_negative, data_avg = array_data)
 @app.route('/', methods = [ 'GET'])
 def index():
     if not current_user.is_authenticated:

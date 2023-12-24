@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Highcharts Line Chart</title>
+    <title>Graphics</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -23,6 +23,8 @@
             <li><a href="{{ url_for('login') }}">Войти</a></li>
             {% else %}
             <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+            <li><a href="{{ url_for('index') }}">График</a></li>
+            <li><a href="{{ url_for('profile') }}">Профиль</a></li>
             {% endif %}
           </ul>
         </div>
